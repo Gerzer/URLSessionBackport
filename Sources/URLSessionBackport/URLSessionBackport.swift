@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif // canImport(FoundationNetworking)
+
 extension URLSession {
     
     /// This is the namespace for backward compatible API.

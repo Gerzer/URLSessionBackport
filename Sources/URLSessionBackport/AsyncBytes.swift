@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif // canImport(FoundationNetworking)
+
 #if compiler(>=5.5.2)
 /// A type erased provider of bytes that multiple types can successfully conform to.
 @usableFromInline

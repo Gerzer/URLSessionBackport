@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif // canImport(FoundationNetworking)
+
 #if compiler(>=5.5.2)
 /// A handler for individual task delegates.
 ///

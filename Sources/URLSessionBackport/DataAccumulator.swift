@@ -8,6 +8,10 @@
 
 import Foundation
 
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif // canImport(FoundationNetworking)
+
 #if compiler(>=5.5.2)
 /// A data accumulator compatible with AsyncSequence.AsyncIterator to facilitate pulling data from the delegate to a compatible AsyncBytes structure.
 ///
