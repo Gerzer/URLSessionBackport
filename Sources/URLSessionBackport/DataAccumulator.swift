@@ -12,7 +12,6 @@ import Foundation
 import FoundationNetworking
 #endif // canImport(FoundationNetworking)
 
-#if compiler(>=5.5.2)
 /// A data accumulator compatible with AsyncSequence.AsyncIterator to facilitate pulling data from the delegate to a compatible AsyncBytes structure.
 ///
 /// First, the user of this class is expected to call onResponse either as soon as the response is available, or an error is thrown, which will signal that the process should continue or fail respectively. onResponse should then be set to nil so it isn't called again.
@@ -93,4 +92,3 @@ class DataAccumulator: BytesProvider {
         }
     }
 }
-#endif

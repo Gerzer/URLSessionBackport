@@ -12,7 +12,6 @@ import Foundation
 import FoundationNetworking
 #endif // canImport(FoundationNetworking)
 
-#if compiler(>=5.5.2)
 /// A delegate proxy for the real URLSession's delegate.
 ///
 /// This class forwards all delegate methods supported pre iOS15/macOS 12 to both the underlying session delegate and any assigned task delegates, consisting of the majority of the backporting work.
@@ -272,4 +271,3 @@ extension SessionDelegateProxy: URLSessionWebSocketDelegate {
         originalWebSocketDelegate?.urlSession?(session, webSocketTask: webSocketTask, didCloseWith: closeCode, reason: reason)
     }
 }
-#endif

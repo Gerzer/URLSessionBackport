@@ -12,7 +12,6 @@ import Foundation
 import FoundationNetworking
 #endif // canImport(FoundationNetworking)
 
-#if compiler(>=5.5.2)
 /// A handler for individual task delegates.
 ///
 /// This type boxes the task, user-provided delegate, and data accumulator (for streamed asyc methods) so it can be easily accessed by the main session delegate proxy.
@@ -36,4 +35,3 @@ struct TaskDelegateHandler {
     var streamDelegate: URLSessionStreamDelegate? { delegate as? URLSessionStreamDelegate }
     var webSocketDelegate: URLSessionWebSocketDelegate? { delegate as? URLSessionWebSocketDelegate }
 }
-#endif
