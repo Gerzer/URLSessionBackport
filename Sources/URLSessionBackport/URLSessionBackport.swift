@@ -47,17 +47,12 @@ extension URLSession {
     @available(iOS, introduced: 13.0, deprecated: 15.0, message: "This override is no longer necessary; you should remove `.backport` and use the built-in initializer instead.")
     @available(watchOS, introduced: 6.0, deprecated: 8.0, message: "This override is no longer necessary; you should remove `.backport` and use the built-in initializer instead.")
     public static func backport(configuration: URLSessionConfiguration, delegate: URLSessionDelegate? = nil, delegateQueue queue: OperationQueue? = nil) -> URLSession {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return URLSession(configuration: configuration, delegate: delegate, delegateQueue: queue)
-        } else {
-            return URLSession(configuration: configuration, delegate: SessionDelegateProxy(originalDelegate: delegate), delegateQueue: queue)
-        }
+        return URLSession(configuration: configuration, delegate: SessionDelegateProxy(originalDelegate: delegate), delegateQueue: queue)
     }
 }
 
 // MARK: - Backported Asyncronous Methods
 
-#if compiler(>=5.5.2)
 extension UnsafeContinuation {
     /// A generic completion handler for URLSession-based tasks
     func taskCompletionHandler<A, B>(_ a: A?, _ b: B?, _ error: E?) where T == (A, B) {
@@ -121,12 +116,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data and response.
     public func data(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.data(for: request, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.dataTask(with: request, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.dataTask(with: request, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -136,12 +127,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data and response.
     public func data(from url: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.data(from: url, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.dataTask(with: url, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.dataTask(with: url, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -152,12 +139,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data and response.
     public func upload(for request: URLRequest, fromFile fileURL: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.upload(for: request, fromFile: fileURL, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.uploadTask(with: request, fromFile: fileURL, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.uploadTask(with: request, fromFile: fileURL, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -168,12 +151,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data and response.
     public func upload(for request: URLRequest, from bodyData: Data, delegate: URLSessionTaskDelegate? = nil) async throws -> (Data, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.upload(for: request, from: bodyData, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.uploadTask(with: request, from: bodyData, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.uploadTask(with: request, from: bodyData, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -183,12 +162,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Downloaded file URL and response. The file will not be removed automatically.
     public func download(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (URL, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.download(for: request, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.downloadTask(with: request, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.downloadTask(with: request, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -198,12 +173,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Downloaded file URL and response. The file will not be removed automatically.
     public func download(from url: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> (URL, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.download(from: url, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.downloadTask(with: url, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.downloadTask(with: url, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -213,12 +184,8 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Downloaded file URL and response. The file will not be removed automatically.
     public func download(resumeFrom resumeData: Data, delegate: URLSessionTaskDelegate? = nil) async throws -> (URL, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            return try await session.download(resumeFrom: resumeData, delegate: delegate)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                resume(session.downloadTask(withResumeData: resumeData, completionHandler: continuation.taskCompletionHandler), with: delegate)
-            }
+        return try await withUnsafeThrowingContinuation { continuation in
+            resume(session.downloadTask(withResumeData: resumeData, completionHandler: continuation.taskCompletionHandler), with: delegate)
         }
     }
     
@@ -228,31 +195,26 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data stream and response.
     public func bytes(for request: URLRequest, delegate: URLSessionTaskDelegate? = nil) async throws -> (AsyncBytes, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            let results = try await session.bytes(for: request, delegate: delegate)
-            return (AsyncBytes(results.0), results.1)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                let task = session.dataTask(with: request)
-                
-                guard let sessionDelegate = session.delegate as? SessionDelegateProxy else {
-                    continuation.resume(throwing: Error.missingBackportSessionDelegateProxy)
-                    return
-                }
-                
-                let accumulator = DataAccumulator()
-                
-                sessionDelegate.addTaskDelegate(task: task, delegate: delegate, dataAccumulator: accumulator) { task, accumulator, results in
-                    switch results {
-                    case .success(let response):
-                        continuation.resume(returning: (AsyncBytes(task: task, dataAccumulator: accumulator), response))
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-                
-                task.resume()
+        return try await withUnsafeThrowingContinuation { continuation in
+            let task = session.dataTask(with: request)
+            
+            guard let sessionDelegate = session.delegate as? SessionDelegateProxy else {
+                continuation.resume(throwing: Error.missingBackportSessionDelegateProxy)
+                return
             }
+            
+            let accumulator = DataAccumulator()
+            
+            sessionDelegate.addTaskDelegate(task: task, delegate: delegate, dataAccumulator: accumulator) { task, accumulator, results in
+                switch results {
+                case .success(let response):
+                    continuation.resume(returning: (AsyncBytes(task: task, dataAccumulator: accumulator), response))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            
+            task.resume()
         }
     }
     
@@ -262,32 +224,26 @@ extension URLSession.Backport {
     /// - Parameter delegate: Task-specific delegate.
     /// - Returns: Data stream and response.
     public func bytes(from url: URL, delegate: URLSessionTaskDelegate? = nil) async throws -> (AsyncBytes, URLResponse) {
-        if #available(macOS 12.0, iOS 15.0, watchOS 8.0, *) {
-            let results = try await session.bytes(from: url, delegate: delegate)
-            return (AsyncBytes(results.0), results.1)
-        } else {
-            return try await withUnsafeThrowingContinuation { continuation in
-                let task = session.dataTask(with: url)
-                
-                guard let sessionDelegate = session.delegate as? SessionDelegateProxy else {
-                    continuation.resume(throwing: Error.missingBackportSessionDelegateProxy)
-                    return
-                }
-                
-                let accumulator = DataAccumulator()
-                
-                sessionDelegate.addTaskDelegate(task: task, delegate: delegate, dataAccumulator: accumulator) { task, accumulator, results in
-                    switch results {
-                    case .success(let response):
-                        continuation.resume(returning: (AsyncBytes(task: task, dataAccumulator: accumulator), response))
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-                
-                task.resume()
+        return try await withUnsafeThrowingContinuation { continuation in
+            let task = session.dataTask(with: url)
+            
+            guard let sessionDelegate = session.delegate as? SessionDelegateProxy else {
+                continuation.resume(throwing: Error.missingBackportSessionDelegateProxy)
+                return
             }
+            
+            let accumulator = DataAccumulator()
+            
+            sessionDelegate.addTaskDelegate(task: task, delegate: delegate, dataAccumulator: accumulator) { task, accumulator, results in
+                switch results {
+                case .success(let response):
+                    continuation.resume(returning: (AsyncBytes(task: task, dataAccumulator: accumulator), response))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            
+            task.resume()
         }
     }
 }
-#endif

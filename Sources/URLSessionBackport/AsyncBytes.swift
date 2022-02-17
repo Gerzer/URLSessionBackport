@@ -18,9 +18,6 @@ protocol BytesProvider {
     mutating func next() async throws -> UInt8?
 }
 
-@available(macOS 12.0, iOS 15.0, watchOS 8.0, *)
-extension URLSession.AsyncBytes.Iterator: BytesProvider {}
-
 extension URLSession.Backport {
     
     /// AsyncBytes conforms to AsyncSequence for data delivery. The sequence is single pass. Delegate will not be called for response and data delivery.
@@ -42,14 +39,6 @@ extension URLSession.Backport {
         init(task: URLSessionDataTask, dataAccumulator: DataAccumulator) {
             self.task = task
             self.bytesProvider = dataAccumulator
-        }
-        
-        /// Initialize ``AsyncBytes`` with ``URLSession.AsyncBytes``. This path is taken on modern OSs.
-        /// - Parameter asyncBytes: The AsyncBytes to read from.
-        @available(macOS 12.0, iOS 15.0, watchOS 8.0, *)
-        init(_ asyncBytes: URLSession.AsyncBytes) {
-            self.task = asyncBytes.task
-            self.bytesProvider = asyncBytes.makeAsyncIterator()
         }
         
         public struct Iterator : AsyncIteratorProtocol {
